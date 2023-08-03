@@ -18,8 +18,8 @@ ORG 0x7C00
 
     jmp     $
  
-msg: DB "hoi!", 0x0D, 0x0A, 0
-buf: TIMES 20 DB 0
+msg: db "hoi!", 0x0D, 0x0A, 0
+buf: times 20 db 0
 
 ;----------------------------------------------------------
 read_disk:
@@ -53,6 +53,7 @@ u16_to_hex:
     loop    .L1
 ; add null-terminator
     mov     BYTE [di], 0
+    mov     byte [di], 0
     ret
 .digits: db "0123456789ABCDEF", 0
 
