@@ -51,7 +51,7 @@ u16_to_hex:
     mov     al, [bx + .digits]
     stosb
     loop    .L1
-; add null-terminator
+; add null-terminator ; hey
     mov     BYTE [di], 0
     mov     byte [di], 0
     ret
