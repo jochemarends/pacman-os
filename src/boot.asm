@@ -1,5 +1,5 @@
 BITS 16
-ORG 0x7C00
+org 0x7C00
 
     cli
     xor     ax, ax
@@ -42,7 +42,7 @@ u16_to_hex:
 ; add prefix
     mov     ax, "0x"
     stosw
-; loop over each nibble
+; convert each nibble
     mov     cx, 4
 .L1:
     rol     dx, 4
@@ -51,9 +51,8 @@ u16_to_hex:
     mov     al, [bx + .digits]
     stosb
     loop    .L1
-; add null-terminator ; hey
+; add null-terminator
     mov     BYTE [di], 0
-    mov     byte [di], 0
     ret
 .digits: db "0123456789ABCDEF", 0
 
