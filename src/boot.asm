@@ -1,6 +1,11 @@
 BITS 16
 org 0x7C00
 
+%macro write 1
+    
+%endmacro 
+
+this:
     cli
     xor     ax, ax
     mov     ds, ax
@@ -10,9 +15,10 @@ org 0x7C00
     mov     si, msg
     call    write
 
-    mov     ax, 0xABC7
-    mov     si, buf
-    call    u16_to_hex
+    push    0
+    mov     ax, 16
+    mov     di, buf
+    call    u16_to_bin
     mov     si, buf
     call    write
 
@@ -30,14 +36,46 @@ lba_to_chs:
 ;----------------------------------------------------------
 
 ;----------------------------------------------------------
+u16_to_bin:
+;----------------------------------------------------------
+    push    bx
+    push    cx
+    push    di
+
+    cld
+    mov     bx, ax
+; add prefix
+    mov     ax, "0b"
+    stosw
+; convert each bit
+    mov     cx, 16
+.L1:
+    mov     al, "0"
+    shl     bx, 1
+    adc     al, 0
+    stosb
+    loop    .L1
+; add null-terminator
+    mov     BYTE [di], 0
+
+    pop     di
+    pop     cx
+    pop     bx
+    ret
+
+;----------------------------------------------------------
 u16_to_hex:
 ; receives: ax = the unsigned value to convert.
 ;           si = pointer to a buffer that can hold at least 
 ;                seven bytes.
 ; returns:  nothing
 ;----------------------------------------------------------
+    push    bx
+    push    cx
+    push    dx
+    push    di
+
     cld
-    mov     di, si
     mov     dx, ax
 ; add prefix
     mov     ax, "0x"
@@ -53,6 +91,11 @@ u16_to_hex:
     loop    .L1
 ; add null-terminator
     mov     BYTE [di], 0
+    
+    pop     di
+    pop     dx
+    pop     cx
+    pop     bx
     ret
 .digits: db "0123456789ABCDEF", 0
 
@@ -73,7 +116,6 @@ u16_to_dec:
     inc     cx
     or      al, al
     jnz     .L1
-
 ; add a prefix
     mov     WORD [si], "0x"
     add     si, 2
@@ -84,8 +126,6 @@ u16_to_dec:
     mov     BYTE [si], "0"
     inc     si
     loop    .L2
-
-
 ; popping ASCII digits from the stack
 .L3:
     pop     WORD [si]
