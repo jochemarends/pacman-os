@@ -1,11 +1,6 @@
-BITS 16
+bits 16
 org 0x7C00
 
-%macro write 1
-    
-%endmacro 
-
-this:
     cli
     xor     ax, ax
     mov     ds, ax
@@ -15,15 +10,13 @@ this:
     mov     si, msg
     call    write
 
-    push    0
-    mov     ax, 16
+    mov     ax, 0x0BAD
     mov     di, buf
-    call    u16_to_bin
+    call    u16_to_hex
     mov     si, buf
     call    write
 
     jmp     $
- 
 msg: db "hoi!", 0x0D, 0x0A, 0
 buf: times 20 db 0
 
@@ -62,7 +55,7 @@ u16_to_bin:
     pop     cx
     pop     bx
     ret
-
+    
 ;----------------------------------------------------------
 u16_to_hex:
 ; receives: ax = the unsigned value to convert.
@@ -70,6 +63,7 @@ u16_to_hex:
 ;                seven bytes.
 ; returns:  nothing
 ;----------------------------------------------------------
+    push    ax
     push    bx
     push    cx
     push    dx
@@ -96,6 +90,7 @@ u16_to_hex:
     pop     dx
     pop     cx
     pop     bx
+    pop     ax
     ret
 .digits: db "0123456789ABCDEF", 0
 
@@ -106,40 +101,45 @@ u16_to_dec:
 ;                seven bytes.
 ; returns:  nothing
 ;----------------------------------------------------------
-    xor     cx, cx
-; pushing ASCII digits on the stack
-.L1:
-    mov     bx, ax
-    shr     ax, 4               ; quotient
-    and     bx, 0x0F            ; remainder
-    push    WORD [bx + .digits]
-    inc     cx
-    or      al, al
-    jnz     .L1
-; add a prefix
-    mov     WORD [si], "0x"
-    add     si, 2
+    push    ax
+    push    bx
+    push    cx
+    push    dx
+    push    di
 
-    mov     ax, 4
-    sub     ax, cx
+    cld
+    xor     cx, cx
+.L1:
+    xor     dx, dx
+    mov     bx, 10
+    div     bx
+    add     dx, "0"
+    push    dx
+    inc     cx
+    or      ax, ax
+    jnz     .L1
 .L2:
-    mov     BYTE [si], "0"
-    inc     si
+    pop     ax
+    stosb
     loop    .L2
-; popping ASCII digits from the stack
-.L3:
-    pop     WORD [si]
-    inc     si
-    loop    .L3
-    mov     BYTE [si], 0
+; add null-terminator
+    mov     BYTE [di], 0
+
+    pop     di
+    pop     dx
+    pop     cx
+    pop     bx
+    pop     ax
     ret
-.digits: db "0123456789ABCDEF", 0
 
 ;----------------------------------------------------------
 write:
 ; receives: si = pointer to a null-terminated string.
 ; returns:  nothing
 ;----------------------------------------------------------
+    push    ax
+    push    bx
+    push    si
     cld
 .loop:
     lodsb
@@ -150,6 +150,9 @@ write:
     int     0x10
     jmp     .loop
 .done:
+    pop     si
+    pop     bx
+    pop     ax
     ret
 
     times 510-($-$$) db 0   ; padding
