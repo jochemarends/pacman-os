@@ -17,6 +17,7 @@ org 0x7C00
     call    write
 
     jmp     $
+    
 msg: db "hoi!", 0x0D, 0x0A, 0
 buf: times 20 db 0
 
@@ -55,7 +56,7 @@ u16_to_bin:
     pop     cx
     pop     bx
     ret
-    
+
 ;----------------------------------------------------------
 u16_to_hex:
 ; receives: ax = the unsigned value to convert.
