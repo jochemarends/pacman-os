@@ -7,20 +7,40 @@ org 0x7C00
     mov     ss, ax
     mov     sp, 0x7C00
 
-    mov     si, msg
-    call    write
-
     mov     [boot_drive], dl    ; saving the bootdrive
+    
+    mov     si, msg
+    call    write               
 
-    mov     ah, 0x02
-    mov     al, 4               ; number of sectors to read
-    mov     ch, 2               ; cylinder
+    mov     ah, 0x00            ; reset disk drives
+    int     0x13                ; low-level disk services
+
+    mov     ah, 0x02            ; read sectors from drive
+    mov     al, 1               ; number of sectors to read
+    mov     ch, 0               ; cylinder
     mov     cl, 2               ; sector
     mov     dh, 0               ; header
+    mov     dl, [boot_drive]
+    xor     bp, bp
+    mov     es, bp
+    mov     bx, 0x7E00
+    int     0x13                ; low-level disk services
+    jc      error
     
+    sti
+    mov     bp, 0x07E0
+    mov     ds, bp
+    jmp     0x0000:0x7E00
+
+.succes:
+
+error:
+    mov     si, error_msg
+    call    write
     jmp     $
     
 msg: db "hoi!", 0x0D, 0x0A, 0
+error_msg: db "oops, something went wrong!", 0x0D, 0x0A, 0
 boot_drive: db 0
 
 ;----------------------------------------------------------
