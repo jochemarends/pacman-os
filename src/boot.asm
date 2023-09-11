@@ -17,7 +17,6 @@ org 0x7C00
     mov     ch, 2               ; cylinder
     mov     cl, 2               ; sector
     mov     dh, 0               ; header
-    mov     dl, 
     
     jmp     $
     
