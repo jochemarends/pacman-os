@@ -10,16 +10,19 @@ org 0x7C00
     mov     si, msg
     call    write
 
-    mov     ax, 0x0BAD
-    mov     di, buf
-    call    u16_to_hex
-    mov     si, buf
-    call    write
+    mov     [boot_drive], dl    ; saving the bootdrive
 
+    mov     ah, 0x02
+    mov     al, 4               ; number of sectors to read
+    mov     ch, 2               ; cylinder
+    mov     cl, 2               ; sector
+    mov     dh, 0               ; header
+    mov     dl, 
+    
     jmp     $
     
 msg: db "hoi!", 0x0D, 0x0A, 0
-buf: times 20 db 0
+boot_drive: db 0
 
 ;----------------------------------------------------------
 read_disk:
