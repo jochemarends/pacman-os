@@ -3,6 +3,22 @@
 start:
     mov     si, msg
     call    write
+
+    mov     ah, 0x00
+    mov     al, 0x13
+    int     0x10
+
+    xor     ax, ax
+.loop
+    cld
+    mov     cx, 0xFA00
+    mov     bp, 0xA000
+    mov     es, bp
+    xor     di, di
+    rep     stosb
+    inc     al
+    jmp     .loop
+
     jmp     $
 
 msg: db "welkom in de kernel!", 0x0D, 0x0A, 0
