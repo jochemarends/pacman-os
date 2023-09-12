@@ -9,14 +9,14 @@ start:
     int     0x10
 
     xor     ax, ax
-.loop
+.loop:
     cld
     mov     cx, 0xFA00
     mov     bp, 0xA000
     mov     es, bp
     xor     di, di
     rep     stosb
-    inc     al
+    mov     al, 1
     jmp     .loop
 
     jmp     $
