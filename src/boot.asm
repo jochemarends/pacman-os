@@ -2,6 +2,7 @@ bits 16
 org 0x7C00
 
     cli
+    cld
     xor     ax, ax
     mov     ds, ax
     mov     ss, ax
@@ -29,7 +30,7 @@ org 0x7C00
     
     sti
     mov     bp, 0x07E0
-    mov     ds, bp
+    ; mov     ds, bp
     jmp     0x0000:0x7E00
 
 .succes:
@@ -39,8 +40,8 @@ error:
     call    write
     jmp     $
     
-msg: db "hoi!", 0x0D, 0x0A, 0
-error_msg: db "oops, something went wrong!", 0x0D, 0x0A, 0
+msg: db "welcome to the bootloader", 0x0D, 0x0A, 0
+error_msg: db "error: failed to load kernel into memory", 0x0D, 0x0A, 0
 boot_drive: db 0
 
 ;----------------------------------------------------------
