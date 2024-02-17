@@ -17,7 +17,7 @@ org 0x7C00
     int     0x13                ; low-level disk services
 
     mov     ah, 0x02            ; read sectors from drive
-    mov     al, 1               ; number of sectors to read
+    mov     al, 4               ; number of sectors to read
     mov     ch, 0               ; cylinder
     mov     cl, 2               ; sector
     mov     dh, 0               ; header
