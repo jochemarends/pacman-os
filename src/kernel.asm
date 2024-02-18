@@ -1,11 +1,13 @@
 bits 16
 
+global kernel
+extern write_str
+
 section .text
-    extern  write
-
-    jmp     $
+kernel:
     mov     si, msg
-    call    write
+    call    write_str
     jmp     $
 
-msg: db "welcome to the kernel", 0x0D, 0x0A, 0
+msg: db "Jag tycker om min hund!", 0x0D, 0x0A, 0
+

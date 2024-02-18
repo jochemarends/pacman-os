@@ -1,10 +1,10 @@
 bits 16
 
+extern write_str
 
 section .text
-global write
 ;----------------------------------------------------------
-write:
+write_str:
 ; receives: si = pointer to a null-terminated string.
 ; returns:  nothing
 ;----------------------------------------------------------
@@ -25,3 +25,4 @@ write:
     pop     bx
     pop     ax
     ret
+

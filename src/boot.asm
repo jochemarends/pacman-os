@@ -1,8 +1,10 @@
 bits 16
 
-%include "io.inc"
+%include "write.inc"
 
-section .text
+extern kernel
+
+section .boot
     cli
     xor     ax, ax
     mov     ds ,ax
@@ -27,9 +29,9 @@ section .text
 
     mov     si, msg
     call    write_str
-    jmp     $
+    jmp     kernel
 
-msg: db "TODO: load more sectors from disk!", 0x0D, 0x0A, 0
+msg: db "Ik hou van mijn hond!", 0x0D, 0x0A, 0
 boot_drive: db 0
 
 times 510-($-$$) db 0   ; padding
