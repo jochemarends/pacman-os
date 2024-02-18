@@ -8,13 +8,14 @@ ASM_FILES := $(wildcard $(SOURCE_DIR)/*.asm)
 OBJ_FILES := $(patsubst $(SOURCE_DIR)/%.asm, $(OUTPUT_DIR)/%.o, $(ASM_FILES))
 
 LD := ld
-LD_ARGS := -m elf_i386 -T$(SOURCE_DIR)/linker.ld -o $(TARGET) $(OBJ_FILES)
+LD_FILE := $(SOURCE_DIR)/linker.ld
+LD_ARGS := -m elf_i386 -T$(LD_FILE) -o $(TARGET) $(OBJ_FILES)
 
 QEMU := qemu-system-x86_64
 QEMU_ARGS := -drive format=raw,file=$(TARGET)
 
 $(TARGET): $(OBJ_FILES)
-	@$(LD) -m elf_i386 -T$(SOURCE_DIR)/linker.ld -o $(TARGET) $(OBJ_FILES) 
+	@$(LD) $(LD_ARGS)
 
 $(OUTPUT_DIR)/%.o: $(SOURCE_DIR)/%.asm
 	@mkdir -p $(OUTPUT_DIR)
