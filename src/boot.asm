@@ -34,6 +34,6 @@ section .boot
 msg: db "Ik hou van mijn hond!", 0x0D, 0x0A, 0
 boot_drive: db 0
 
-times 510-($-$$) db 0   ; padding
-db 0x55, 0xAA           ; boot signature
+;times 510-($-$$) db 0   ; padding
+;db 0x55, 0xAA           ; boot signature
 
