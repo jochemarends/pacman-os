@@ -2,7 +2,7 @@ bits 16
 
 extern write_str
 
-section .text
+section .boot
 ;----------------------------------------------------------
 write_str:
 ; receives: si = pointer to a null-terminated string.
