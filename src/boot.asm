@@ -6,6 +6,7 @@ extern kernel
 
 section .boot
     cli
+    cld
     xor     ax, ax
     mov     ds ,ax
     mov     ss, ax
@@ -26,6 +27,8 @@ section .boot
     mov     es, bp
     mov     bx, 0x7E00
     int     0x13                ; low-level disk services
+
+    sti
 
     mov     si, msg
     call    write_str
