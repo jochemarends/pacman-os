@@ -1,6 +1,7 @@
 bits 16
 
-extern vga_mode_0x13_test
+global vga_mode_0x13_test
+global vga_mode_0x10_test
 
 %include "write.inc"
 
@@ -35,4 +36,31 @@ vga_mode_0x13_test:
     ret
 
 msg: db "debug", 0x0D, 0x0A, 0
+
+vga_mode_0x10_test:
+    push    ax
+    push    es
+; entering mode 0x10
+    mov     ah, 0x00
+    mov     al, 0x10
+    int     0x10
+; writing to the first pixel (top left corner)
+    mov     al, 0x02
+    mov     ah, 0x02
+    mov     dx, 0x3C4
+    out     dx, ax
+
+    mov     ax, 0xA000
+    mov     es, ax
+    inc     byte [es:0x0000]
+
+    cld
+    mov     al, 0xFF
+    mov     cx, (640 + 320) / 8
+    xor     di, di
+    rep     stosb
+
+    pop     es
+    pop     ax
+    ret
 

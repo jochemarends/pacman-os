@@ -1,8 +1,9 @@
 bits 16
 
-extern write_str
+global write_str
 
 section .boot
+
 ;----------------------------------------------------------
 write_str:
 ; receives: si = pointer to a null-terminated string.
