@@ -1,8 +1,17 @@
 
 %include "vga.inc"
 
-global gfx_init
+global gfx_draw_rect
 
 section .text
-gfx_init:
-    ret
+
+;----------------------------------------------------------
+gfx_draw_rect:
+; receives: si
+;----------------------------------------------------------
+
+
+gfx_swap_buffers:
+
+
+
